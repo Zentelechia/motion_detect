@@ -1,6 +1,10 @@
-String device_ID = "040056";
+String device_ID = "040058";
+/// Для прошивки датчика - поставьте // в начале строки
 
-#include <SoftwareSerial.h>
+//#define reciever true
+
+
+
 #include <avr/wdt.h>
 #include <avr/power.h>
 #include <avr/sleep.h>
@@ -8,33 +12,38 @@ String device_ID = "040056";
 #include "delays.h"
 #include "settings.h"
 #include "hardware.h"
-#include "eeprom.h"
 #include "hc12.h"
-#include "functions.h"
 
+#ifdef reciever
+#include "hm10.h"
+#endif
+
+#include "eeprom.h"
+#include "leds.h"
+#include "sounds.h"
+#include "functions.h"
+#include "states.h"
 
 
 
 boolean power_plugged = false;
 
 
-/// Для прошивки датчика - поставьте // в начале строки
-#define reciever true
 
 
 //Раскоментируйте  следующую строку, если нужно перепроишть hc-12, неуспешно прошитую ранее микроконтроллером (влияет на hc12_init)
-//#define reflash true
+#define reflash true
 
 //  ID прошиваемого устройства
 
 
 
 
-  #warning  Проверьте ID прошиваемого устройства, убедитесь что поставили актульный номер
+#warning  Проверьте ID прошиваемого устройства, убедитесь что поставили актульный номер
 #ifdef reciever
-  #include "reciever.h"
-  #warning !!!!!!!!   Внимание!!! Это прошивка для ___Приемника.  Закомментируйте строку выше  ____#define reciever_____ true для прошивки Датчика
+#include "reciever.h"
+#warning !!!!!!!!   Внимание!!! Это прошивка для ___Приемника.  Закомментируйте строку выше  ____#define reciever_____ true для прошивки Датчика
 #else
-  #include "transmitter.h"
-  #warning !!!!!!!!   Внимание!!! Это прошивка для ___Датчика.    Раскомемнтируйте строку выше  ____#define reciever_____ true для прошивки Приемника
+#include "transmitter.h"
+#warning !!!!!!!!   Внимание!!! Это прошивка для ___Датчика.    Раскомемнтируйте строку выше  ____#define reciever_____ true для прошивки Приемника
 #endif

@@ -11,6 +11,11 @@ int mSLEEP_8S = 8000;
 //    int SLEEP_FOREVER
 
 
+#define blink_duration      mSLEEP_120MS
+#define blink_long_duration mSLEEP_2S
+#define blink_short_duration mSLEEP_120MS
+
+
 void sleep_delay(int sleep_time) {
   delay(sleep_time);
   //  LowPower.idle(sleep_time);

@@ -1,6 +1,4 @@
 
-const String firmware_ver = "0.1";
-
 #ifdef DEBUG
 int pass_first_alarms = 1; // (2min=120sec-5 ~startup_time / 8s)
 #else
@@ -31,20 +29,24 @@ ISR (WDT_vect)
 }
 
 void sleep_and_react (const byte interval) {
-  if (pir_alarm && digitalRead(pir_pin) == HIGH )
-  {
-    if (!polling) {
-      detachInterrupt (0);
-      hc12_wakeup();
-      Serial.print(pir_cmd + device_ID);
-      delay(hc12_SEND_DELAY);
-      hc12_sleep();
-      blink_red(blink_short_duration);
-      pir_alarm = false;
-    }
+  if (pir_alarm && digitalRead(pir_pin) == HIGH && !polling) {
+    detachInterrupt (0);
+    hc12_wakeup();
+    Serial.print(pir_cmd + device_ID);
+    delay(hc12_SEND_DELAY);
+    hc12_sleep();
+    blink_red(1000);
+    pir_alarm = false;
   }
   else {
-    blink_red(blink_short_duration);
+    if (pass_first_alarms > 0) {
+      blink_yellow(40);
+      delay(40);
+      blink_yellow(40);
+    }
+    else {
+        show_battery_status();
+    }
     if (polling) {
       polling = false;
       s = s8;
@@ -54,7 +56,7 @@ void sleep_and_react (const byte interval) {
       polling = true;
       sleeps_count = 0;
       hc12_wakeup();
-      Serial.print(polling_cmd + device_ID + 'b' + battery_voltage());
+      Serial.print(polling_cmd + device_ID + 'b' + (String) (battery_voltage * battery_k));
       delay(hc12_SEND_DELAY);
       hc12_sleep();
       s = s8;
@@ -74,8 +76,8 @@ void sleep_and_react (const byte interval) {
   sleep_enable();
   if (pass_first_alarms == 0 && !polling) {
     attachInterrupt (0, pir_interrupt, RISING);   // позволяем заземлить pin 2 для выхода из сна
-//    attachInterrupt (1, button_interrupt, FALLING);   // позволяем заземлить pin 2 для выхода из сна
   }
+  attachInterrupt (digitalPinToInterrupt(button_pin), button_interrupt, FALLING);   // позволяем заземлить pin 2 для выхода из сна
   interrupts ();
   sleep_cpu ();
   // переходим в сон и ожидаем прерывание
@@ -84,34 +86,58 @@ void sleep_and_react (const byte interval) {
   power_all_enable ();   // включаем все модули
   if (pass_first_alarms > 0) {
     pass_first_alarms--;
-    led_on(red_led_pin);
   }
   else {
     led_off(red_led_pin);
   }
-
+}
+void wait_for_reciever() {
+  boolean reciever_offline = true;
+  update_battery_voltage();
+  led_on(red_led_pin);
+  led_on(green_led_pin);
+  Serial.print(id_cmd + device_ID + 'b' + (String) (battery_voltage * battery_k));
+  delay(hc12_SEND_DELAY);
+  if (Serial.available()) {
+    String s = Serial.readString();
+    if (s.indexOf(looking_for_transmitter_cmd + device_ID) > -1) {
+      reciever_offline = false;
+    }
+  }
+  if (reciever_offline) {
+    while (reciever_offline) {
+      sleep_if_button_5s_pressed();
+      if (Serial.available()) {
+        String s = Serial.readString();
+        if (s.indexOf(looking_for_transmitter_cmd + device_ID) > -1) {
+          led_off(red_led_pin);
+          led_off(green_led_pin);
+          reciever_offline = false;
+          Serial.print(id_cmd + device_ID + 'b' + (String) (battery_voltage * battery_k));
+          delay(hc12_SEND_DELAY);
+        }
+        delay(500);
+      }
+    }
+  }
 }
 
 void setup () {
-  power_down_while_button_pressed_2s();
-  led_on(red_led_pin);
-
-  pinMode(pir_pin, INPUT);
-  pinMode(power_plugged_pin, INPUT);
-  pinMode(button_pin, INPUT);
-
-  digitalWrite(pir_pin, LOW);
-
-  hc12_init();
-  Serial.print(id_cmd + device_ID + 'b' + battery_voltage() + firmware_ver);
-  delay(hc12_SEND_DELAY);
-  hc12_sleep();
-  check_leds();
-  show_battery_status();
-  turn_5v_on();
+  //sleep
+  //init
+  //->wait for reciever
+  device_sleep();
+  wait_for_reciever();
+  device_init();
 }
 void loop()
 {
+  //work
+  //->alarm
+  //->polling
+  //->shutdown
+  //->work_status
+  //->
   sleep_and_react (s);
   sleep_if_button_5s_pressed();
 }
