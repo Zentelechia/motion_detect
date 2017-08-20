@@ -3,13 +3,9 @@ byte life_counter = 0;
 byte reciever_send=0;
 unsigned long m;
 
-ISR (WDT_vect)
-{
-
-}
 volatile unsigned long last_polling = 0;
-unsigned long int powerbank_last_activation_time = 0;
-unsigned long int powerbank_activation_interval = 5L * 3600UL * 1000UL; //5 hours
+unsigned long  powerbank_last_activation_time = 0;
+unsigned long  powerbank_activation_interval = 5L * 3600UL * 1000UL; //5 hours
 
 void idle_1s() {
     delay(1000);
