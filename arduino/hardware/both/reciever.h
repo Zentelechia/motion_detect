@@ -7,7 +7,7 @@ ISR (WDT_vect)
 {
 
 }
-volatile unsigned int last_polling = 0;
+volatile unsigned long last_polling = 0;
 unsigned long int powerbank_last_activation_time = 0;
 unsigned long int powerbank_activation_interval = 5L * 3600UL * 1000UL; //5 hours
 
