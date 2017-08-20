@@ -5,7 +5,7 @@ unsigned long m;
 
 volatile unsigned long last_polling = 0;
 unsigned long  powerbank_last_activation_time = 0;
-unsigned long  powerbank_activation_interval = 5L * 3600UL * 1000UL; //5 hours
+unsigned long  powerbank_activation_interval = 3L * 3600UL * 1000UL; //3 hours
 
 void idle_1s() {
     delay(1000);
@@ -65,11 +65,12 @@ void loop() {
   //->alarm
   //->sensor_init
   
- // if (millis() - powerbank_last_activation_time > powerbank_activation_interval) {
-//    activate_power_bank();
- //   powerbank_last_activation_time = millis();
- // }
+  
   m=millis();
+  if (m - powerbank_last_activation_time > powerbank_activation_interval) {
+   activate_power_bank();
+    powerbank_last_activation_time = m;
+  }
   if ((m - last_polling) > polling_timeout) {
     last_polling=m;
     no_polling();

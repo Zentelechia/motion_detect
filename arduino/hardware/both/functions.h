@@ -46,7 +46,7 @@ void turn_5v_off() {
 void activate_power_bank() {
   pinMode(power_bank_activation_pin, OUTPUT);
   digitalWrite(power_bank_activation_pin, HIGH);
-  delay(1);
+  delay(1000);
   digitalWrite(power_bank_activation_pin, LOW);
   pinMode(power_bank_activation_pin, INPUT);
   digitalWrite(power_bank_activation_pin, LOW);
