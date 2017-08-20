@@ -2,34 +2,16 @@
 byte life_counter = 0;
 byte reciever_send=0;
 
+ISR (WDT_vect)
+{
+
+}
 unsigned int last_polling = 0;
 unsigned long int powerbank_last_activation_time = 0;
 unsigned long int powerbank_activation_interval = 5L * 3600UL * 1000UL; //5 hours
 
 void idle_1s() {
-  delay(1000);
-  /*
-    byte adcsra_save = ADCSRA;
-
-    cli();
-    MCUSR = 0;
-    WDTCSR |= 0b00011000;               // устанавливаем WDCE, WDE
-    WDTCSR =  0b01000000 | 0b000110;   //1s
-    wdt_reset();
-
-
-    ADCSRA = 0;  // запрещаем работу АЦП
-
-
-    set_sleep_mode(SLEEP_MODE_IDLE);
-    sei(); //interrupts ();
-    sleep_mode();
-    power_all_enable();
-    wdt_reset();
-    sleep_disable();
-    ADCSRA = adcsra_save;
-  */
-
+    delay(1000);
 }
 
 void no_polling() {

@@ -1,3 +1,68 @@
+void device_sleep() { 
+  led_off(red_led_pin);
+  led_off(green_led_pin);
+
+  byte adcsra_save = ADCSRA;
+  /*
+  for (int i = 0; i < 20; i++ ) {
+    pinMode(i, OUTPUT);
+  }
+  */
+  digitalWrite(power_bank_activation_pin, LOW);
+  
+  turn_5v_off();
+  hc12_sleep();
+#ifdef reciever
+  hm10_sleep();
+ /* 
+  pinMode(hm10_key_pin,OUTPUT);
+  pinMode(alarm_pin,OUTPUT);
+  digitalWrite(hm10_key_pin,HIGH);
+  */
+#endif
+  pinMode(button_pin, INPUT);
+  //wdt_disable();
+  boolean state_at_start = digitalRead(button_pin);
+  while (sleeping) {
+    noInterrupts ();
+    sleep_enable();
+    attachInterrupt (1, button_2_isr, LOW);
+    MCUSR = 0;
+    noInterrupts ();
+    // сбрасываем различные флаги
+    byte adcsra_save = ADCSRA;
+    ADCSRA = 0;  // запрещаем работу АЦП
+    //Disable ADC
+    power_all_disable ();   // выключаем все модули
+    set_sleep_mode (SLEEP_MODE_PWR_DOWN);   // устанавливаем режим сна
+    sleep_enable();
+    interrupts ();
+    sleep_cpu ();
+    sleep_disable();
+    power_all_enable();
+    delay(millis_to_wakeup);
+    if (digitalRead(button_pin) == LOW && state_at_start == HIGH) {
+      sleeping = false;
+    }
+    if (digitalRead(button_pin) == HIGH ) {
+      state_at_start == HIGH;
+    }
+  }
+#ifdef reciever
+  t();
+#endif
+  detachInterrupt (digitalPinToInterrupt(button_pin));     // останавливаем прерывание LOW
+  ADCSRA = adcsra_save;  // останавливаем понижение питания
+  power_all_enable ();   // включаем все модули
+  blink_green(100);
+  delay(100);
+  blink_green(100);
+  prepare_after_wake_up();
+
+}
+
+
+
 void device_init() {
   turn_5v_on();
   analogReference(DEFAULT);
@@ -35,73 +100,6 @@ void device_init() {
   digitalWrite(pir_pin, LOW);
   attachInterrupt (digitalPinToInterrupt(button_pin), button_interrupt, FALLING);   // позволяем заземлить pin 2 для выхода из сна
 #endif
-}
-
-void device_sleep() {
-  byte adcsra_save = ADCSRA;
-  for (int i = 0; i < 20; i++ ) {
-    pinMode(i, OUTPUT);
-  }
-  digitalWrite(power_bank_activation_pin, LOW);
-  turn_5v_off();
-#ifdef reciever
-  pinMode(hm10_key_pin,OUTPUT);
-  digitalWrite(hm10_key_pin,HIGH);
-
-  hm10.begin(9600);
-  hm10.println(hm10_renew);
-  sleep_delay(mSLEEP_250MS);
-  hm10.println(hm10_reset);
-  sleep_delay(mSLEEP_250MS);
-  /*
-  hm10.println(hm10_central);
-  sleep_delay(mSLEEP_250MS);
-  hm10.println(hm10_reset);
-  sleep_delay(mSLEEP_250MS);
-  */
-#endif
-  led_off(red_led_pin);
-  led_off(green_led_pin);
-  pinMode(button_pin, INPUT);
-  wdt_disable();
-  boolean state_at_start = digitalRead(button_pin);
-  while (sleeping) {
-    noInterrupts ();
-    sleep_enable();
-    attachInterrupt (1, button_2_isr, LOW);
-    MCUSR = 0;
-    noInterrupts ();
-    // сбрасываем различные флаги
-    byte adcsra_save = ADCSRA;
-    ADCSRA = 0;  // запрещаем работу АЦП
-    //Disable ADC
-    power_all_disable ();   // выключаем все модули
-    set_sleep_mode (SLEEP_MODE_PWR_DOWN);   // устанавливаем режим сна
-    sleep_enable();
-    interrupts ();
-    sleep_cpu ();
-    sleep_disable();
-    power_all_enable();
-    delay(millis_to_wakeup);
-    if (digitalRead(button_pin) == LOW && state_at_start == HIGH) {
-      sleeping = false;
-    }
-    if (digitalRead(button_pin) == HIGH ) {
-      state_at_start == HIGH;
-    }
-
-  }
-#ifdef reciever
-  t();
-#endif
-  detachInterrupt (digitalPinToInterrupt(button_pin));     // останавливаем прерывание LOW
-  ADCSRA = adcsra_save;  // останавливаем понижение питания
-  power_all_enable ();   // включаем все модули
-  blink_green(100);
-  delay(100);
-  blink_green(100);
-  prepare_after_wake_up();
-
 }
 
 

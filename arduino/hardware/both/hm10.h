@@ -11,13 +11,8 @@
 #define hm10_renew "AT+RENEW"
 
 #define hm10_sleep_cmd "AT+SLEEP"
-
 #define hm10_no_auto_sleep_cmd "AT+PWRM1"
 #define hm10_auto_sleep_cmd "AT+PWRM0"
-
-
-
-
 #define hm10_name_prefix String("GRUZ_")
 
 
@@ -37,3 +32,14 @@ void hm10_wakeup() {
   hm10.println(hm10_reset);
   sleep_delay(mSLEEP_500MS);
 }
+
+
+void hm10_sleep() {
+  hm10.begin(9600);
+  hm10.println(hm10_sleep_cmd);
+  sleep_delay(mSLEEP_250MS); 
+  hm10.println(hm10_reset);
+ sleep_delay(mSLEEP_500MS);
+}
+
+

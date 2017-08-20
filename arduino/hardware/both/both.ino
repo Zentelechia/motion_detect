@@ -1,11 +1,11 @@
 String device_ID = "040058";
 /// Для прошивки датчика - поставьте // в начале строки
 
-//#define reciever true
+ #define reciever true
 
 
 
-#include <avr/wdt.h>
+
 #include <avr/power.h>
 #include <avr/sleep.h>
 #include <EEPROM.h>
@@ -44,6 +44,7 @@ boolean power_plugged = false;
 #include "reciever.h"
 #warning !!!!!!!!   Внимание!!! Это прошивка для ___Приемника.  Закомментируйте строку выше  ____#define reciever_____ true для прошивки Датчика
 #else
+#include <avr/wdt.h>
 #include "transmitter.h"
 #warning !!!!!!!!   Внимание!!! Это прошивка для ___Датчика.    Раскомемнтируйте строку выше  ____#define reciever_____ true для прошивки Приемника
 #endif

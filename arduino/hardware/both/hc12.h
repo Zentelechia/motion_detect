@@ -42,6 +42,8 @@ void hc12_init() {
   Serial.begin(1200);
 }
 void hc12_sleep() {
+  Serial.begin(1200);
+  sleep_delay(AT_EXIT_DELAY);
   pinMode(hc12_set_pin, OUTPUT);
   digitalWrite(hc12_set_pin, LOW);
   delay(AT_EXIT_DELAY);

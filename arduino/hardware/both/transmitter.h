@@ -87,9 +87,7 @@ void sleep_and_react (const byte interval) {
   if (pass_first_alarms > 0) {
     pass_first_alarms--;
   }
-  else {
-    led_off(red_led_pin);
-  }
+
 }
 void wait_for_reciever() {
   boolean reciever_offline = true;
@@ -97,7 +95,7 @@ void wait_for_reciever() {
   led_on(red_led_pin);
   led_on(green_led_pin);
   Serial.print(id_cmd + device_ID + 'b' + (String) (battery_voltage * battery_k));
-  delay(hc12_SEND_DELAY);
+  delay(2000);
   if (Serial.available()) {
     String s = Serial.readString();
     if (s.indexOf(looking_for_transmitter_cmd + device_ID) > -1) {

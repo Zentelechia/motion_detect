@@ -28,11 +28,11 @@ void prepare_after_wake_up() {
 // Показываем статус аккумуляторы: если ОК - длинное включение светодиода, если средне - среднее, малый заряд - короткое моргание
 
 void update_battery_voltage() {
-    pinMode(bat_voltage_measure_enable_pin, OUTPUT);
-    digitalWrite(bat_voltage_measure_enable_pin, HIGH);
-    delay(50);
-    battery_voltage = analogRead(bat_voltage_measure_pin);  //* 0.0064453; //1024.0 * 3.3  *2;
-    digitalWrite(bat_voltage_measure_enable_pin, LOW);
+  pinMode(bat_voltage_measure_enable_pin, OUTPUT);
+  digitalWrite(bat_voltage_measure_enable_pin, HIGH);
+  delay(50);
+  battery_voltage = analogRead(bat_voltage_measure_pin);  //* 0.0064453; //1024.0 * 3.3  *2;
+  digitalWrite(bat_voltage_measure_enable_pin, LOW);
 }
 void turn_5v_on() {
   pinMode(DC5_enable_pin, OUTPUT);

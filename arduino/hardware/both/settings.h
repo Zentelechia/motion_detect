@@ -25,20 +25,6 @@
 #define id_cmd          'I'
 #define no_polling_cmd  'N'
 #define no_polling_stopped_cmd  'S'
-#define hc12_SLEEP     "AT+SLEEP\r\n"
-#define hc12_SET_DEFAULT   "AT+DEFAULT\r\n"
-#define hc12_SET_FU    "AT+FU4\r\n"
-#define hc12_SET_CH    "AT+C055\r\n"
-#define hc12_SET_PDB   "AT+P8\r\n"
-#define hc12_WAKEUP    "AT\r\n"
-
-#define hm10_name_cmd "AT+NAME"
-#define hm10_sleep_cmd "AT+SLEEP"
-#define hm10_auto_sleep_cmd "AT+PWRM0"
-
-#define AT_RESPONSE_DELAY mSLEEP_500MS    //Delay after sending AT cmd to HC-12
-#define AT_EXIT_DELAY     mSLEEP_250MS     //Delay after  setting SET pin of HC-12 to LOW or HIGH
-#define hc12_SEND_DELAY  mSLEEP_1S    //Delay after sending data (for FU4 - minimum 1s)
 
 #define battery_k 0.0064453  // 3.3/1024*2
 
