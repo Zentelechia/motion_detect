@@ -1,12 +1,13 @@
 
 byte life_counter = 0;
 byte reciever_send=0;
+unsigned long m;
 
 ISR (WDT_vect)
 {
 
 }
-unsigned int last_polling = 0;
+volatile unsigned int last_polling = 0;
 unsigned long int powerbank_last_activation_time = 0;
 unsigned long int powerbank_activation_interval = 5L * 3600UL * 1000UL; //5 hours
 
@@ -16,6 +17,7 @@ void idle_1s() {
 
 void no_polling() {
   hm10.print(no_polling_cmd + transmitter_ID);
+  delay(hm10_send_delay);
   sound_no_polling();
 }
 
@@ -66,15 +68,14 @@ void loop() {
   //->polling
   //->alarm
   //->sensor_init
- 
- 
+  
  // if (millis() - powerbank_last_activation_time > powerbank_activation_interval) {
 //    activate_power_bank();
  //   powerbank_last_activation_time = millis();
  // }
- 
-  if ((millis() - last_polling) > polling_timeout) {
-    last_polling=millis();
+  m=millis();
+  if ((m - last_polling) > polling_timeout) {
+    last_polling=m;
     no_polling();
   }
   if (hm10.available()) {   
@@ -85,6 +86,7 @@ void loop() {
     }
     if (bls == "voltage") {
       hm10.print("power" + (String) + digitalRead(power_plugged_pin) + 'v' + (String) (battery_voltage * battery_k) + sensor_init_string);
+      delay(hm10_send_delay);
     }
     if (bls == "ping") {
       Serial.print("ping" + transmitter_ID);
@@ -95,23 +97,24 @@ void loop() {
     String s = Serial.readString();
     if (s.indexOf(pir_cmd + transmitter_ID) > -1) {
       hm10.print(s);
-      delay(1000);
-      last_polling = millis();
+      delay(hm10_send_delay);
+      last_polling = m;
       sound_alarm();
     }
     if (s.indexOf(id_cmd + transmitter_ID) > -1) {
       hm10.print(s);
-      delay(2000);
-      Serial.print(looking_for_transmitter_cmd + transmitter_ID);
+      delay(hm10_send_delay);
+//      Serial.print(looking_for_transmitter_cmd + transmitter_ID);
       delay(hc12_SEND_DELAY);
-      last_polling = millis();
+      last_polling = m;
       sensor_init_string = s;
       sensor_started();
     }
     if (s.indexOf(polling_cmd + transmitter_ID) > -1) {
       hm10.print(s);
-      last_polling = millis();
-      delay(1000);
+      delay(hm10_send_delay);
+      last_polling = m;
+//      delay(1000);
       sound_polling();
     }
   }
@@ -123,11 +126,11 @@ void loop() {
     life_counter = 0;
   }
   if (reciever_send%30==0){
-      String m= (String) + "power"+digitalRead(power_plugged_pin) + 'v' + (String) (battery_voltage * battery_k) + sensor_init_string;
+      String m= (String) + "power"+digitalRead(power_plugged_pin) + 'v' + (String) (battery_voltage * battery_k);
      hm10.print(m);
+     delay(hm10_send_delay);
    }
    reciever_send++;
-
 }
 
 

@@ -4,11 +4,11 @@
 #define common_anode true
 
 #ifdef common_anode
-int led_on_state = LOW;
-int led_off_state = HIGH;
+  int led_on_state=LOW;
+  int led_off_state=HIGH;
 #else
-int led_on_state = HIGH;
-int led_off_state = LOW;
+  int led_on_state=HIGH;
+  int led_off_state=LOW;
 #endif
 
 

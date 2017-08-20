@@ -26,11 +26,11 @@
 #define no_polling_cmd  'N'
 #define no_polling_stopped_cmd  'S'
 
-#define battery_k 0.0064453  // 3.3/1024*2
+#define battery_k 1 //0.0064453  // 3.3/1024*2
 
 #define  battery_high_voltage   627 // 4.1
 #define  battery_medium_voltage  566 // 3.7
 #define  battery_low_voltage   535 //3.5
 
-unsigned long polling_timeout = 15UL * 60UL * 1000UL; //UL - окончания для unsigned long, иначе проблема
+unsigned long polling_timeout = (unsigned long) (15UL * 60UL * 1000UL); //UL - окончания для unsigned long, иначе проблема
 

@@ -3,6 +3,7 @@
 #define hm10_key_pin                    6
 #define hm10_rx_pin                     8
 #define hm10_tx_pin                     9
+#define hm10_send_delay                 250
 
 #define hm10_central "AT+ROLE0"
 #define hm10_perepherial "AT+ROLE0"

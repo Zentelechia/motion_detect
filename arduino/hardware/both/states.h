@@ -1,4 +1,5 @@
 void device_sleep() { 
+  volatile boolean sleeping = true;
   led_off(red_led_pin);
   led_off(green_led_pin);
 
@@ -51,9 +52,11 @@ void device_sleep() {
 #ifdef reciever
   t();
 #endif
-  detachInterrupt (digitalPinToInterrupt(button_pin));     // останавливаем прерывание LOW
+//  detachInterrupt(digitalPinToInterrupt(button_pin));     // останавливаем прерывание LOW
   ADCSRA = adcsra_save;  // останавливаем понижение питания
   power_all_enable ();   // включаем все модули
+  pinMode(green_led_pin, OUTPUT);
+  pinMode(red_led_pin, OUTPUT);
   blink_green(100);
   delay(100);
   blink_green(100);
@@ -65,13 +68,18 @@ void device_sleep() {
 
 void device_init() {
   turn_5v_on();
+  hc12_wakeup();
+  pinMode(red_led_pin,OUTPUT);
+  pinMode(green_led_pin,OUTPUT);
+
+
   analogReference(DEFAULT);
   pinMode(power_plugged_pin, INPUT);
   pinMode(button_pin, INPUT);
   check_leds();
   show_battery_status();
 #if reciever==true
-//  hm10_wakeup();
+  hm10_wakeup();
   hm10.println(hm10_name_cmd + hm10_name_prefix + device_ID);
   sleep_delay(mSLEEP_250MS);
   
@@ -86,11 +94,11 @@ void device_init() {
   Serial.print(looking_for_transmitter_cmd + transmitter_ID);
   delay(hc12_SEND_DELAY);
   delay(1000);
-  hm10.print(battery_voltage);
   if (Serial.available()) {
     String s = Serial.readString();
     if (s.indexOf(id_cmd + transmitter_ID) > -1) {
       hm10.print(s);
+      delay(hm10_send_delay);
       sensor_init_string = s;
       sensor_started();
     }

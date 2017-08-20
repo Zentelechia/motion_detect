@@ -1,8 +1,6 @@
 String transmitter_ID;
 String sensor_init_string = "";
-volatile boolean sleeping = true;
-volatile boolean button_pressed = false;
-volatile boolean  wdt_start = false;
+
 volatile unsigned long millis_from_button_pressed = 0;
 volatile int prev_button_status = HIGH;
 const unsigned int millis_to_wakeup = 4000;
@@ -80,7 +78,6 @@ void sleep_if_button_5s_pressed() {
 
 
 void button_2_isr() {
-  wdt_start = true;
   sleep_disable();
   detachInterrupt (1);
 }
