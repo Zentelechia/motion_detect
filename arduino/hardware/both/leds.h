@@ -1,5 +1,10 @@
+#ifdef wrong_leds
+#define red_led_pin                     13
+#define green_led_pin                   A4
+#else
 #define red_led_pin                     A4
 #define green_led_pin                   13
+#endif
 
 #define common_anode true
 
