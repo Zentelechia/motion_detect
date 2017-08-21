@@ -28,6 +28,7 @@ void prepare_after_wake_up() {
 void update_battery_voltage() {
   pinMode(bat_voltage_measure_enable_pin, OUTPUT);
   digitalWrite(bat_voltage_measure_enable_pin, HIGH);
+  pinMode(bat_voltage_measure_pin,INPUT);
   delay(50);
   battery_voltage = analogRead(bat_voltage_measure_pin);  //* 0.0064453; //1024.0 * 3.3  *2;
   digitalWrite(bat_voltage_measure_enable_pin, LOW);

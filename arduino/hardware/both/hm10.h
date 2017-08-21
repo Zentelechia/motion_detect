@@ -5,7 +5,7 @@
 #define hm10_tx_pin                     9
 #define hm10_send_delay                 250
 
-#define hm10_central "AT+ROLE0"
+#define hm10_central "AT+ROLE1"
 #define hm10_perepherial "AT+ROLE0"
 #define hm10_name_cmd "AT+NAME"
 #define hm10_reset "AT+RESET"
@@ -37,6 +37,11 @@ void hm10_wakeup() {
 
 void hm10_sleep() {
   hm10.begin(9600);
+  sleep_delay(mSLEEP_250MS); 
+  hm10.println(hm10_central);
+  sleep_delay(mSLEEP_500MS);
+  hm10.println(hm10_reset);
+  sleep_delay(mSLEEP_500MS);
   hm10.println(hm10_sleep_cmd);
   sleep_delay(mSLEEP_250MS); 
   hm10.println(hm10_reset);
