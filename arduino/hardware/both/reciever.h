@@ -1,11 +1,12 @@
 
 byte life_counter = 0;
-byte reciever_send=0;
+int reciever_send=0;
 unsigned long m;
 
 volatile unsigned long last_polling = 0;
+#define powerbank_interval  15UL // minutes
 unsigned long  powerbank_last_activation_time = 0;
-unsigned long  powerbank_activation_interval = 3L * 3600UL * 1000UL; //3 hours
+unsigned long  powerbank_activation_interval = powerbank_interval * 60UL * 1000UL; 
 
 void idle_1s() {
     delay(1000);
@@ -14,7 +15,9 @@ void idle_1s() {
 void no_polling() {
   hm10.print(no_polling_cmd + transmitter_ID);
   delay(hm10_send_delay);
-  sound_no_polling();
+  #ifdef DEBUG
+    sound_no_polling();
+  #endif
 }
 
 void device_add_sensor() {
@@ -122,7 +125,7 @@ void loop() {
     show_battery_status();
     life_counter = 0;
   }
-  if (reciever_send%30==0){
+  if (reciever_send%3600==0){
       String m= (String) + "power"+digitalRead(power_plugged_pin) + 'v' + (String) (battery_voltage * battery_k);
      hm10.print(m);
      delay(hm10_send_delay);

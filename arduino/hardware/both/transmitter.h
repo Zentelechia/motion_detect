@@ -1,4 +1,5 @@
 
+
 #ifdef DEBUG
 int pass_first_alarms = 1; // (2min=120sec-5 ~startup_time / 8s)
 #else
@@ -125,7 +126,7 @@ void setup () {
   //init
   //->wait for reciever
   device_sleep();
-  wait_for_reciever();
+  //wait_for_reciever();
   device_init();
 }
 void loop()
