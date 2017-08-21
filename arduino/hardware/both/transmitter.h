@@ -8,9 +8,9 @@ int pass_first_alarms = 13; // (2min=120sec-5 ~startup_time / 8s)
 
 byte s = s8;
 
-volatile boolean pir_alarm = false;
-volatile int sleeps_count = 0;
-boolean polling = false;
+volatile boolean pir_alarm;
+volatile int sleeps_count;
+boolean polling;
 const int sleep_interval = 10 * 60 ; //sec
 const int sleep_cycles = (int) sleep_interval / 8;
 unsigned long time;
@@ -122,6 +122,11 @@ void wait_for_reciever() {
 }
 
 void setup () {
+  pir_alarm = false;
+  sleeps_count = 0;
+  polling = false;
+
+
   //sleep
   //init
   //->wait for reciever

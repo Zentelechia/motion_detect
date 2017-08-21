@@ -9,23 +9,25 @@ void device_sleep() {
     pinMode(i, OUTPUT);
   }
   */
+  pinMode(power_bank_activation_pin,OUTPUT);
   digitalWrite(power_bank_activation_pin, LOW);
+
+  pinMode(alarm_pin,OUTPUT);
+  noTone(alarm_pin);
+  
+  digitalWrite(alarm_pin,LOW);
+
+  pinMode(bat_voltage_measure_enable_pin,OUTPUT);
+  digitalWrite(bat_voltage_measure_enable_pin,LOW);
   
   turn_5v_off();
   hc12_sleep();
 #ifdef reciever
-  hm10_sleep();
- /* 
-  pinMode(hm10_key_pin,OUTPUT);
-  pinMode(alarm_pin,OUTPUT);
-  digitalWrite(hm10_key_pin,HIGH);
-  */
-  
+  hm10_sleep();  
 #endif
   pinMode(button_pin, INPUT);
-  //wdt_disable();
-  boolean state_at_start = digitalRead(button_pin);
   while (sleeping) {
+    boolean state_at_start = digitalRead(button_pin);
     noInterrupts ();
     sleep_enable();
     attachInterrupt (1, button_2_isr, LOW);
