@@ -20,6 +20,7 @@ void device_sleep() {
   pinMode(alarm_pin,OUTPUT);
   digitalWrite(hm10_key_pin,HIGH);
   */
+  
 #endif
   pinMode(button_pin, INPUT);
   //wdt_disable();
@@ -60,6 +61,7 @@ void device_sleep() {
   blink_green(100);
   delay(100);
   blink_green(100);
+ 
   prepare_after_wake_up();
 
 }
@@ -69,15 +71,15 @@ void device_sleep() {
 void device_init() {
   turn_5v_on();
   hc12_wakeup();
+  
   pinMode(red_led_pin,OUTPUT);
   pinMode(green_led_pin,OUTPUT);
-
 
   analogReference(DEFAULT);
   pinMode(power_plugged_pin, INPUT);
   pinMode(button_pin, INPUT);
-  check_leds();
-  show_battery_status();
+
+
 #if reciever==true
   hm10_wakeup();
   hm10.println(hm10_name_cmd + hm10_name_prefix + device_ID);
@@ -91,23 +93,17 @@ void device_init() {
     transmitter_ID = device_ID;
     write_StringEE(transmitter_ID_eeprom_address, transmitter_ID);
   }
-  Serial.print(looking_for_transmitter_cmd + transmitter_ID);
-  delay(hc12_SEND_DELAY);
-  delay(1000);
-  if (Serial.available()) {
-    String s = Serial.readString();
-    if (s.indexOf(id_cmd + transmitter_ID) > -1) {
-      hm10.print(s);
-      delay(hm10_send_delay);
-      sensor_init_string = s;
-      sensor_started();
-    }
-  }
+  
 #else
   pinMode(pir_pin, INPUT);
   digitalWrite(pir_pin, LOW);
   attachInterrupt (digitalPinToInterrupt(button_pin), button_interrupt, FALLING);   // позволяем заземлить pin 2 для выхода из сна
+  update_battery_voltage();
+  Serial.print(id_cmd + device_ID + 'b' + (String) (battery_voltage * battery_k));
+  
 #endif
+  check_leds(); 
+  show_battery_status();
 }
 
 
