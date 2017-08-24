@@ -23,7 +23,7 @@ void hm10_wakeup() {
   pinMode(hm10_key_pin, OUTPUT);
   hm10.begin(9600);
   digitalWrite(hm10_key_pin, LOW);
-  delay(1000);
+  delay(1100);
   digitalWrite(hm10_key_pin, HIGH);
   sleep_delay(mSLEEP_250MS);  
   hm10.println(hm10_no_auto_sleep_cmd);

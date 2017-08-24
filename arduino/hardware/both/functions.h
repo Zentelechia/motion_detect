@@ -4,13 +4,13 @@ String sensor_init_string = "";
 volatile unsigned long millis_from_button_pressed = 0;
 volatile int prev_button_status = HIGH;
 const unsigned int millis_to_wakeup = 4000;
-const unsigned int debounce_microseconds = 20000;
-const byte s2 = 0b000111;
 void(* resetFunc) (void) = 0;
+
 byte device_ID_length = device_ID.length();
 
 void button_interrupt() {
 }
+
 void prepare_after_wake_up() {
   pinMode(hc12_set_pin, OUTPUT);
 #if  reciever == true
@@ -29,7 +29,7 @@ void prepare_after_wake_up() {
 void update_battery_voltage() {
   pinMode(bat_voltage_measure_enable_pin, OUTPUT);
   digitalWrite(bat_voltage_measure_enable_pin, HIGH);
-  pinMode(bat_voltage_measure_pin,INPUT);
+  pinMode(bat_voltage_measure_pin, INPUT);
   delay(50);
   battery_voltage = analogRead(bat_voltage_measure_pin);  //* 0.0064453; //1024.0 * 3.3  *2;
   delay(50);
@@ -53,25 +53,24 @@ void activate_power_bank() {
   digitalWrite(power_bank_activation_pin, LOW);
   pinMode(power_bank_activation_pin, INPUT);
   digitalWrite(power_bank_activation_pin, LOW);
-
 }
 
 
 void sleep_if_button_5s_pressed() {
   if (digitalRead(button_pin) == LOW) {
-    delay(5000);
+    delay(4000);
     if (digitalRead(button_pin) == LOW) {
-      
-      #ifndef reciver
+#ifndef reciver
       hc12_wakeup();
       Serial.print(switched_off_cmd + device_ID + 'b' + (String) (battery_voltage * battery_k));
       delay(hc12_SEND_DELAY);
-      #endif
-      
+#endif
       blink_red(100);
       delay(100);
       blink_red(100);
+#ifdef reciever
       offline_sound();
+#endif
       resetFunc();
     }
   }

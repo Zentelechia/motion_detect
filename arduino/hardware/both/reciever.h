@@ -2,7 +2,8 @@
 byte life_counter;
 unsigned long m;
 int reciever_send;
-
+int ppp;
+int previous_power_plugged_pin;
 volatile unsigned long last_polling;
 #define powerbank_interval  15UL // minutes
 unsigned long  powerbank_last_activation_time;
@@ -67,8 +68,10 @@ void setup() {
   device_sleep();
   device_add_sensor();
   device_init();
-  powerbank_last_activation_time = millis();
+//  powerbank_last_activation_time = millis();
   last_polling = millis();
+  pinMode(power_plugged_pin,INPUT);
+  ppp=digitalRead(power_plugged_pin);
 }
 void loop() {
   //work
@@ -78,7 +81,7 @@ void loop() {
 
 
   m = millis();
-  if (m - powerbank_last_activation_time > powerbank_activation_interval) {
+  if (false && (m - powerbank_last_activation_time > powerbank_activation_interval)) {
     activate_power_bank();
     powerbank_last_activation_time = m;
   }
@@ -141,10 +144,17 @@ void loop() {
     life_counter = 0;
   }
   if (reciever_send % 3600 == 0) {
-    String m = (String) + "power" + digitalRead(power_plugged_pin) + 'v' + (String) (battery_voltage * battery_k);
+    String m = "power" + digitalRead(power_plugged_pin) + 'v' + (String) (battery_voltage * battery_k);
     hm10.print(m);
     delay(hm10_send_delay);
   }
+  ppp=digitalRead(power_plugged_pin);
+  if (ppp=!previous_power_plugged_pin){
+    previous_power_plugged_pin=ppp;
+    String m = "power" + ppp + 'v' + (String) (battery_voltage * battery_k);
+    hm10.print(m);
+    delay(hm10_send_delay);
+    }
   reciever_send++;
 }
 
