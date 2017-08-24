@@ -1,5 +1,5 @@
 void device_sleep() { 
-  volatile boolean sleeping = true;
+  volatile boolean sleeping = false;
   led_off(red_led_pin);
   led_off(green_led_pin);
 
@@ -41,7 +41,7 @@ void device_sleep() {
     set_sleep_mode (SLEEP_MODE_PWR_DOWN);   // устанавливаем режим сна
     sleep_enable();
     interrupts ();
-    sleep_cpu ();
+  //  sleep_cpu ();
     sleep_disable();
     power_all_enable();
     delay(millis_to_wakeup);
