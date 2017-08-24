@@ -1,13 +1,13 @@
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#define DEBUG true  /// Закомментировать для боевой прошивки 
+//#define DEBUG true  /// Закомментировать для боевой прошивки 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-String device_ID = "040059";
+String device_ID = "050325";
 
 /// Для прошивки датчика - поставьте // в начале строки
- #define reciever true
- 
+//#define reciever true
+
  
  /// Если после включения моргает красный светодиод - уберит // в начале строки
 #define wrong_leds true
@@ -18,8 +18,8 @@ String device_ID = "040059";
 #include <avr/sleep.h>
 #include <EEPROM.h>
 #include "delays.h"
-#include "settings.h"
 #include "hardware.h"
+#include "settings.h"
 #include "hc12.h"
 
 #ifdef reciever
@@ -31,6 +31,7 @@ String device_ID = "040059";
 #include "sounds.h"
 #include "functions.h"
 #include "states.h"
+
 
 
 

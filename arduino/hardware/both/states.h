@@ -77,7 +77,7 @@ void device_init() {
   pinMode(red_led_pin,OUTPUT);
   pinMode(green_led_pin,OUTPUT);
 
-  analogReference(DEFAULT);
+//  analogReference(DEFAULT);
   pinMode(power_plugged_pin, INPUT);
   pinMode(button_pin, INPUT);
 

@@ -1,7 +1,7 @@
 
 
 #ifdef DEBUG
-int pass_first_alarms = 1; // (2min=120sec-5 ~startup_time / 8s)
+int pass_first_alarms = 13; // (2min=120sec-5 ~startup_time / 8s)
 #else
 int pass_first_alarms = 13; // (2min=120sec-5 ~startup_time / 8s)
 #endif
