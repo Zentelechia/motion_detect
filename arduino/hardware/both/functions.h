@@ -59,18 +59,17 @@ void sleep_if_button_5s_pressed() {
   if (digitalRead(button_pin) == LOW) {
     delay(5000);
     if (digitalRead(button_pin) == LOW) {
+      
+      #ifndef reciver
+      hc12_wakeup();
+      Serial.print(switched_off_cmd + device_ID + 'b' + (String) (battery_voltage * battery_k));
+      delay(hc12_SEND_DELAY);
+      #endif
+      
       blink_red(100);
       delay(100);
       blink_red(100);
-      pinMode(alarm_pin, OUTPUT);
-      tone(alarm_pin, Sol);
-      sleep_delay(mSLEEP_120MS);
-      tone(alarm_pin, Mi);
-      sleep_delay(mSLEEP_120MS);
-      tone(alarm_pin, Do);
-      sleep_delay(mSLEEP_120MS);
-      noTone(alarm_pin);
-      pinMode(alarm_pin, INPUT);
+      offline_sound();
       resetFunc();
     }
   }

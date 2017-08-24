@@ -118,6 +118,13 @@ void loop() {
       sensor_init_string = s;
       sensor_started();
     }
+    if (s.indexOf(switched_off_cmd + transmitter_ID) > -1) {
+      hm10.print(s);
+      delay(hm10_send_delay);
+      Serial.print(switched_off_cmd + transmitter_ID);
+      delay(hc12_SEND_DELAY);
+      offline_sound();
+    }
     if (s.indexOf(polling_cmd + transmitter_ID) > -1) {
       hm10.print(s);
       delay(hm10_send_delay);

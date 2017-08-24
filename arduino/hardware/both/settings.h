@@ -25,6 +25,7 @@
 #define id_cmd          'I'
 #define no_polling_cmd  'N'
 #define no_polling_stopped_cmd  'S'
+#define switched_off_cmd 'O'
 
 #define battery_k 1 //0.0064453  // 3.3/1024*2
 

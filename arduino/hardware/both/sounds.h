@@ -5,6 +5,18 @@ void sound_no_polling() {
   sleep_delay(mSLEEP_250MS);
   noTone(alarm_pin);
 }
+void offline_sound() {
+  pinMode(alarm_pin, OUTPUT);
+  tone(alarm_pin, Sol);
+  sleep_delay(mSLEEP_120MS);
+  tone(alarm_pin, Mi);
+  sleep_delay(mSLEEP_120MS);
+  tone(alarm_pin, Do);
+  sleep_delay(mSLEEP_120MS);
+  noTone(alarm_pin);
+  pinMode(alarm_pin, INPUT);
+
+}
 void sound_alarm() {
   int i = 0;
   int k = 0;
@@ -29,7 +41,7 @@ void sound_alarm() {
   }
   while (flag) {
 
-    
+
     for (i = 300; i < 500; i++) {
       if (digitalRead(button_pin) == LOW) {
         flag = false;
@@ -47,15 +59,15 @@ void sound_alarm() {
       tone(alarm_pin, i);
       sleep_delay(mSLEEP_15MS);
     }
-     noTone(alarm_pin);
-     for (i = 0; i <45; i++) {
+    noTone(alarm_pin);
+    for (i = 0; i < 45; i++) {
       if (digitalRead(button_pin) == LOW) {
         flag = false;
         break;
       }
       sleep_delay(mSLEEP_60MS);
     }
-    
+
   }
   noTone(alarm_pin);
   led_off(red_led_pin);
@@ -83,7 +95,7 @@ void t() {
   delay(100);
 }
 void sensor_started() {
-//  pinMode(alarm_pin, OUTPUT);
+  //  pinMode(alarm_pin, OUTPUT);
   tone(alarm_pin, Do);
   sleep_delay(mSLEEP_120MS);
   tone(alarm_pin, Mi);
@@ -91,6 +103,6 @@ void sensor_started() {
   tone(alarm_pin, Sol);
   sleep_delay(mSLEEP_120MS);
   noTone(alarm_pin);
-//  pinMode(alarm_pin, INPUT);
+  //  pinMode(alarm_pin, INPUT);
 
 }

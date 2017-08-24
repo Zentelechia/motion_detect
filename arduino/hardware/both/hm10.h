@@ -41,7 +41,7 @@ void hm10_sleep() {
   hm10.println(hm10_central);
   sleep_delay(mSLEEP_500MS);
   hm10.println(hm10_reset);
-  sleep_delay(mSLEEP_500MS);
+  sleep_delay(mSLEEP_500MS);  
   hm10.println(hm10_sleep_cmd);
   sleep_delay(mSLEEP_250MS); 
   hm10.println(hm10_reset);
